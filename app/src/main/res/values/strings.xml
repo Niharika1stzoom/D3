@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">D3</string>
+    <string name="GO">GO</string>
+    <string name="url_label">Please enter your URL</string>
+    <string name="welcome_label">D3</string>
+    <string name="err_enter_url">Enter URL</string>
+    <string name="err_invalid_url">Enter valid url</string>
+    <string name="title_activity_web">WebActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="welcome_subtitle">The power of Display Advertising</string>
+    <string name="hint_url">https://www.example.com</string>
+</resources>
