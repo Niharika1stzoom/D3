@@ -1,22 +1,31 @@
-package com.example.d3;
+package com.example.d3.Web;
 
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
 import android.webkit.WebSettings;
 
+import com.example.d3.R;
 import com.example.d3.databinding.ActivityWebBinding;
+import com.example.d3.main.MainFragment;
+import com.example.d3.main.MainViewModel;
+import com.example.d3.util.AppUtil;
+import com.example.d3.util.SharedPrefUtil;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class WebActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -101,6 +110,7 @@ public class WebActivity extends AppCompatActivity {
         }
     };
     private ActivityWebBinding binding;
+    private WebViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +122,8 @@ public class WebActivity extends AppCompatActivity {
         mVisible = true;
         //mControlsView = binding.fullscreenContentControls;
         mContentView = binding.webView;
-        showWebContent();
+        initViewModel();
+        //showWebContent();
         binding.webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -122,9 +133,32 @@ public class WebActivity extends AppCompatActivity {
         });
 
     }
-    private void showWebContent() {
-        Intent intent = getIntent();
-        String url = intent.getStringExtra(MainActivity.EXTRA_URL);
+
+    private void initViewModel() {
+        mViewModel = new ViewModelProvider(this).get(WebViewModel.class);
+        mViewModel.getPlayList(AppUtil.getDeviceInfo(getApplicationContext())).observe(this, playlistUrl -> {
+            if(playlistUrl==null){
+                Log.d("D3","playlist null");
+               // setRefreshButton();
+            }
+            else {
+                Log.d("D3","playlist not null");
+                showWebContent(playlistUrl);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //SharedPrefUtil.unRegistered(getApplicationContext());
+    }
+
+    private void showWebContent(String url) {
+       // Intent intent = getIntent();
+       //String url = intent.getStringExtra(MainFragment.EXTRA_URL);
+      // url="http://20.204.52.253:3000/preview/6239b2c94417fbf1e6bfef96";
         WebSettings webSettings = binding.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         WebViewClientImpl webViewClient = new WebViewClientImpl(this,binding.progressBar);

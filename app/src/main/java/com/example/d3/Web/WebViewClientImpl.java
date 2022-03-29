@@ -1,4 +1,4 @@
-package com.example.d3;
+package com.example.d3.Web;
 
 import android.app.Activity;
 import android.view.View;
@@ -19,7 +19,7 @@ public class WebViewClientImpl extends WebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-        // if(url.indexOf("journaldev.com") > -1 ) return false;
+        // if(url.indexOf("google.com") > -1 ) return false;
         return false;
        /* Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         activity.startActivity(intent);
