@@ -136,17 +136,50 @@ public class WebActivity extends AppCompatActivity {
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(WebViewModel.class);
+       observeURL();
+
+    }
+    void observeURL()
+    {
+        Log.d("D3","Getting playslist");
         mViewModel.getPlayList(AppUtil.getDeviceInfo(getApplicationContext())).observe(this, playlistUrl -> {
             if(playlistUrl==null){
                 Log.d("D3","playlist null");
-               // setRefreshButton();
+                setRefreshButton();
+                //goto main Activity
+                //load from cache
+               // hideRefreshButton();
+              //  showWebContent(playlistUrl);
             }
             else {
                 Log.d("D3","playlist not null");
+                hideRefreshButton();
                 showWebContent(playlistUrl);
             }
         });
+    }
 
+    private void hideRefreshButton() {
+        binding.fabRefresh.setVisibility(View.GONE);
+
+    }
+
+    private void setRefreshButton() {
+        hideWebView();
+        binding.fabRefresh.setVisibility(View.VISIBLE);
+
+        binding.fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //load url request instead of observing again
+                mViewModel.getPlayList(AppUtil.getDeviceInfo(getApplicationContext()));
+                //getURL();
+            }
+        });
+    }
+
+    private void hideWebView() {
+        binding.webView.setVisibility(View.GONE);
     }
 
     @Override
@@ -156,11 +189,18 @@ public class WebActivity extends AppCompatActivity {
     }
 
     private void showWebContent(String url) {
+        binding.webView.setVisibility(View.VISIBLE);
        // Intent intent = getIntent();
        //String url = intent.getStringExtra(MainFragment.EXTRA_URL);
-      // url="http://20.204.52.253:3000/preview/6239b2c94417fbf1e6bfef96";
+     //url="https://samplelib.com/lib/preview/mp4/sample-5s.mp4";
+      //url="http://20.204.52.253:3000/preview/6239b2c94417fbf1e6bfef96";
+        //if(AppUtil.isNetworkAvailableAndConnected(this))
+      //  url="http://www.google.com";
+
         WebSettings webSettings = binding.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+       // webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
         WebViewClientImpl webViewClient = new WebViewClientImpl(this,binding.progressBar);
         binding.webView.setWebViewClient(webViewClient);
         binding.webView.loadUrl(url);

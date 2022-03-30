@@ -12,9 +12,10 @@ import retrofit2.http.POST;
 
 public interface D3ApiInterface {
        //pass the device id to retrieve the url
-        @GET("e3fbe384-5ac4-4290-9127-611d5bde4454")
+       @GET("e3fbe384-5ac4-4290-9127-611d5bde4454")
         Call<APIResponse> getURL();
-
+       //@GET("url")
+       //Call<APIResponse> getURL();
 
         //register the device
         @POST("users")

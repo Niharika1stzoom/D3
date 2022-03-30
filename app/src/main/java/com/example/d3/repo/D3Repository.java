@@ -30,10 +30,11 @@ public class D3Repository {
             public void onResponse(@NonNull Call<APIResponse> call,
                                    @NonNull Response<APIResponse> response) {
                 if (response.isSuccessful()) {
+                   //liveData.postValue(null);
                     liveData.postValue(response.body().getName());
-                    Log.d("D3In","Got string playlist not null"+response.body().getName());
+                   // Log.d("D3In","Got string playlist not null"+response.body().getName());
                 } else {
-                    Log.d("D3In","Got string playlist not null in unsuccess"+response.body());
+                    //Log.d("D3In","Got string playlist not null in unsuccess"+response.body());
                     liveData.postValue(null);
                 }
             }

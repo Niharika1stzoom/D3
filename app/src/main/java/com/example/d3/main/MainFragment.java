@@ -12,9 +12,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.d3.R;
 import com.example.d3.Web.WebActivity;
 import com.example.d3.databinding.MainFragmentBinding;
+import com.example.d3.util.AppUtil;
+import com.google.android.material.snackbar.Snackbar;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -41,8 +45,11 @@ public class MainFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
        if(mViewModel.checkDeviceRegister())
         goToWebActivity();
-       else
-           setRefreshButton();
+       else {
+           registerUser();
+           goToWebActivity();
+       }
+
     }
 
     private void setRefreshButton() {
@@ -50,7 +57,6 @@ public class MainFragment extends Fragment {
         mBinding.fabRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerUser();
                 goToWebActivity();
 
             }
@@ -59,6 +65,8 @@ public class MainFragment extends Fragment {
     void registerUser()
     {
         mViewModel.setRegistered();
+        Toast.makeText(getActivity(), getString(R.string.register_success), Toast.LENGTH_SHORT).show();
+        //AppUtil.showSnackbar(getView(),getString(R.string.register_success));
 
                /* mViewModel.registerDevice(AppUtil.getDeviceInfo(getContext())).
                         observe(getViewLifecycleOwner(), deviceInfo -> {
