@@ -6,24 +6,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-public class WebViewClientImpl extends WebViewClient {
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-    private Activity activity = null;
+public class WebViewClientImpl extends WebViewClient {
     private ProgressBar progressBar;
 
-    public WebViewClientImpl(Activity activity, ProgressBar progressBar) {
-        this.activity = activity;
+    public WebViewClientImpl( ProgressBar progressBar) {
         this.progressBar = progressBar;
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-        // if(url.indexOf("google.com") > -1 ) return false;
         return false;
-       /* Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        activity.startActivity(intent);
-        return true;*/
     }
 
     @Override

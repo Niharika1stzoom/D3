@@ -46,8 +46,8 @@ public class MainFragment extends Fragment {
        if(mViewModel.checkDeviceRegister())
         goToWebActivity();
        else {
-           registerUser();
-           goToWebActivity();
+           setRegisterUI();
+           //goToWebActivity();
        }
 
     }
@@ -66,6 +66,8 @@ public class MainFragment extends Fragment {
     {
         mViewModel.setRegistered();
         Toast.makeText(getActivity(), getString(R.string.register_success), Toast.LENGTH_SHORT).show();
+        //pass the pin and store the user id in shared pref instead of the status
+
         //AppUtil.showSnackbar(getView(),getString(R.string.register_success));
 
                /* mViewModel.registerDevice(AppUtil.getDeviceInfo(getContext())).
@@ -77,25 +79,22 @@ public class MainFragment extends Fragment {
                         goToWebActivity();
                     }
                 });*/
+        //if the user is registered successfully send him to
+        goToWebActivity();
     }
-    //get him registered
-    //send to web activity
-    //if not found show him refresh button
 
-  /*  private void getPlayListURL()
+    private void setRegisterUI() {
+        //set the UI for registering
+        //On click of the submit button register him and show the and if any error show the err msg
+
+        //If the device code is wrong show him err msg a snackbar
+        registerUser();
+    }
+
+    private Boolean validate()
     {
-    mViewModel.getPlayList(AppUtil.getDeviceInfo(getContext())).observe(getViewLifecycleOwner(), playlistUrl -> {
-       if(playlistUrl==null){
-           Log.d("D3","playlist null");
-           setRefreshButton();
-       }
-       else {
-           Log.d("D3","playlist not null");
-           showWebActivity(playlistUrl);
-       }
-    });
-    }*/
-
+        return true;
+    }
     private void goToWebActivity() {
         Intent intent = new Intent(getActivity(), WebActivity.class);
         intent.putExtra(EXTRA_URL, "");

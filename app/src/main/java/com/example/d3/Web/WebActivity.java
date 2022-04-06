@@ -4,8 +4,15 @@ import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,8 +27,15 @@ import com.example.d3.R;
 import com.example.d3.databinding.ActivityWebBinding;
 import com.example.d3.main.MainFragment;
 import com.example.d3.main.MainViewModel;
+import com.example.d3.model.DeviceInfo;
+import com.example.d3.util.AppConstants;
 import com.example.d3.util.AppUtil;
+import com.example.d3.util.SchedulerUtil;
 import com.example.d3.util.SharedPrefUtil;
+
+import java.util.Calendar;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -67,7 +81,6 @@ public class WebActivity extends AppCompatActivity {
             }
         }
     };
-    private View mControlsView;
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
@@ -111,6 +124,7 @@ public class WebActivity extends AppCompatActivity {
     };
     private ActivityWebBinding binding;
     private WebViewModel mViewModel;
+    private WorkManager mgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,10 +134,8 @@ public class WebActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle(getString(R.string.app_name));
         mVisible = true;
-        //mControlsView = binding.fullscreenContentControls;
         mContentView = binding.webView;
         initViewModel();
-        //showWebContent();
         binding.webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -131,52 +143,32 @@ public class WebActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+        //binding.dummyButton.setOnTouchListener(mDelayHideTouchListener);
     }
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(WebViewModel.class);
        observeURL();
-
     }
     void observeURL()
     {
-        Log.d("D3","Getting playslist");
         mViewModel.getPlayList(AppUtil.getDeviceInfo(getApplicationContext())).observe(this, playlistUrl -> {
-            if(playlistUrl==null){
+           if(playlistUrl==null){
                 Log.d("D3","playlist null");
-                setRefreshButton();
-                //goto main Activity
-                //load from cache
-               // hideRefreshButton();
-              //  showWebContent(playlistUrl);
+
             }
             else {
-                Log.d("D3","playlist not null");
-                hideRefreshButton();
-                showWebContent(playlistUrl);
+                //save the last url in shared pref and showWeb content
+                Log.d("D3","Its not null");
+                mViewModel.saveLastUrl(playlistUrl);
+               //SchedulerUtil.scheduleService(this,"");
+             //  scheduleService(2);
             }
+            showWebContent();
         });
     }
 
-    private void hideRefreshButton() {
-        binding.fabRefresh.setVisibility(View.GONE);
 
-    }
-
-    private void setRefreshButton() {
-        hideWebView();
-        binding.fabRefresh.setVisibility(View.VISIBLE);
-
-        binding.fabRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //load url request instead of observing again
-                mViewModel.getPlayList(AppUtil.getDeviceInfo(getApplicationContext()));
-                //getURL();
-            }
-        });
-    }
 
     private void hideWebView() {
         binding.webView.setVisibility(View.GONE);
@@ -185,25 +177,27 @@ public class WebActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+       mViewModel.stopService();
+
         //SharedPrefUtil.unRegistered(getApplicationContext());
     }
 
-    private void showWebContent(String url) {
-        binding.webView.setVisibility(View.VISIBLE);
+    private void showWebContent() {
+        //binding.webView.setVisibility(View.VISIBLE);
        // Intent intent = getIntent();
        //String url = intent.getStringExtra(MainFragment.EXTRA_URL);
-     //url="https://samplelib.com/lib/preview/mp4/sample-5s.mp4";
+        //url="https://samplelib.com/lib/preview/mp4/sample-5s.mp4";
       //url="http://20.204.52.253:3000/preview/6239b2c94417fbf1e6bfef96";
         //if(AppUtil.isNetworkAvailableAndConnected(this))
       //  url="http://www.google.com";
 
         WebSettings webSettings = binding.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-       // webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webSettings.setMediaPlaybackRequiresUserGesture(false);
-        WebViewClientImpl webViewClient = new WebViewClientImpl(this,binding.progressBar);
+        //webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+      webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        WebViewClientImpl webViewClient = new WebViewClientImpl(binding.progressBar);
         binding.webView.setWebViewClient(webViewClient);
-        binding.webView.loadUrl(url);
+        binding.webView.loadUrl(mViewModel.getLastUrl());
     }
 
     @Override
@@ -222,6 +216,45 @@ public class WebActivity extends AppCompatActivity {
         } else {
             show();
         }
+    }
+    public void scheduleService( Integer dateTime) {
+      /*  Executors.newSingleThreadScheduledExecutor().schedule(
+                mViewModel.loadPlayList(AppUtil.getDeviceInfo(getApplicationContext()))
+        , 2, TimeUnit.SECONDS);*/
+     /* mViewModel.startScheduler(dateTime);
+        mViewModel.getSchedulerWorkInfo().observe(this,workInfos -> {
+            if(workInfos!=null || !workInfos.isEmpty())
+            {
+                if(workInfos.get(0).getState().isFinished()) {
+                    //mViewModel.stopService();
+                    mViewModel.getPlayList(AppUtil.getDeviceInfo(this));
+
+                    // mgr.cancelUniqueWork(AppConstants.WORKER_TAG);
+                    // mgr.getWorkInfosForUniqueWorkLiveData(AppConstants.WORKER_TAG).removeObservers(this);
+                    Log.d("Data", "Calling from wrk manager finish" + Calendar.getInstance().getTime());
+                }
+            }
+        });
+        /*  OneTimeWorkRequest schedulerWorkRequest =
+                new OneTimeWorkRequest.Builder(SchedulerWorker.class).setInitialDelay(2,TimeUnit.MINUTES)
+                        .build();
+         mgr=WorkManager.getInstance(this);
+              mgr .enqueueUniqueWork(AppConstants.WORKER_TAG,
+                        ExistingWorkPolicy.REPLACE,
+                        schedulerWorkRequest);
+    mgr.getWorkInfosForUniqueWorkLiveData(AppConstants.WORKER_TAG).observe(this,workInfos -> {
+    if(workInfos!=null || !workInfos.isEmpty())
+    {
+        if(workInfos.get(0).getState().isFinished()) {
+            mViewModel.getPlayList(AppUtil.getDeviceInfo(this));
+            // mgr.cancelUniqueWork(AppConstants.WORKER_TAG);
+            // mgr.getWorkInfosForUniqueWorkLiveData(AppConstants.WORKER_TAG).removeObservers(this);
+            Log.d("Data", "Calling from wrk manager finish" + Calendar.getInstance().getTime());
+        }
+    }
+});
+*/
+
     }
 
     private void hide() {

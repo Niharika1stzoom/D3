@@ -1,5 +1,6 @@
 package com.example.d3.repo;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.d3.model.APIResponse;
 import com.example.d3.model.DeviceInfo;
 import com.example.d3.network.D3ApiInterface;
+import com.example.d3.util.SharedPrefUtil;
 
 import java.util.List;
 
@@ -31,7 +33,8 @@ public class D3Repository {
                                    @NonNull Response<APIResponse> response) {
                 if (response.isSuccessful()) {
                    //liveData.postValue(null);
-                    liveData.postValue(response.body().getName());
+                    liveData.postValue("http://20.204.52.253:3000/preview/624d62feaf044ebab5476eed");
+                    //liveData.postValue(response.body().getName());
                    // Log.d("D3In","Got string playlist not null"+response.body().getName());
                 } else {
                     //Log.d("D3In","Got string playlist not null in unsuccess"+response.body());
@@ -65,5 +68,13 @@ public class D3Repository {
                 liveData.postValue(null);
             }
         });
+    }
+
+    public void saveLastURL(Context context, String playlistUrl) {
+        SharedPrefUtil.setLastUrl(context,playlistUrl);
+    }
+
+    public String getLastUrl(Context context) {
+        return SharedPrefUtil.getLastUrl(context);
     }
 }

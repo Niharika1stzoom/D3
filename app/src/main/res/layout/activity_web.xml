@@ -23,15 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_gravity="center"
-        android:src="@drawable/refresh" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-
 </FrameLayout>
