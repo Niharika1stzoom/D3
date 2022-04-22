@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.d3.main.MainFragment"
+        android:name="com.zoom.d3.main.MainFragment"
         android:label="MainFragment" />
 </navigation>

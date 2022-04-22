@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/niharika/android/D3/app/src/main/res/font/montserrat.xml" value="0.1671875" />
         <entry key="..\:/niharika/android/D3/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/niharika/android/D3/app/src/main/res/layout/activity_tvactivity.xml" value="0.10260416666666666" />
         <entry key="..\:/niharika/android/D3/app/src/main/res/layout/activity_web.xml" value="0.14130434782608695" />
         <entry key="..\:/niharika/android/D3/app/src/main/res/layout/content_main.xml" value="0.1272644927536232" />
         <entry key="..\:/niharika/android/D3/app/src/main/res/layout/main_fragment.xml" value="0.13645833333333332" />
+        <entry key="..\:/niharika/android/D3/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
       </map>
     </option>
   </component>

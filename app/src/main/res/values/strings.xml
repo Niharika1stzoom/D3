@@ -10,5 +10,14 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="welcome_subtitle">The power of Display Advertising</string>
     <string name="hint_url">https://www.example.com</string>
-    <string name="register_success">You are registered with D3</string>
+    <string name="register_success">Your device is registered</string>
+
+
+    <!-- Error messages -->
+    <string name="error_fragment_message">An error occurred</string>
+    <string name="dismiss_error">Dismiss</string>
+    <string name="network_err">Please check your network connection.</string>
+    <string name="refresh">Do you wish to refresh the playlist or exit?</string>
+    <string name="no">Exit</string>
+    <string name="yes">Refresh</string>
 </resources>

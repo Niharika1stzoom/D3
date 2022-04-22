@@ -12,8 +12,18 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-    <color name="primaryColor">#00acc1</color>
-    <color name="primaryLightColor">#5ddef4</color>
-    <color name="primaryDarkColor">#007c91</color>
-    <color name="primaryTextColor">#000000</color>
+    <color name="primaryColor">#fdc921</color>
+    <color name="primaryLightColor">#fffc5c</color>
+    <color name="primaryDarkColor">#c59900</color>
+    <color name="secondaryColor">#fff176</color>
+    <color name="secondaryLightColor">#ffffa8</color>
+    <color name="secondaryDarkColor">#cabf45</color>
+    <color name="primaryTextColor">#7F4A24</color>
+    <color name="secondaryTextColor">#000000</color>
+    <color name="background_gradient_start">#000000</color>
+    <color name="background_gradient_end">#DDDDDD</color>
+    <color name="fastlane_background">#0096a6</color>
+    <color name="search_opaque">#ffaa3f</color>
+    <color name="selected_background">#ffaa3f</color>
+    <color name="default_background">#3d3d3d</color>
 </resources>
