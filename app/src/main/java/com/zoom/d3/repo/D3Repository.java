@@ -74,7 +74,6 @@ public class D3Repository {
                                    @NonNull Response<DeviceInfo> response) {
                 if (response.isSuccessful()) {
                     liveData.postValue(response.body());
-                    Log.d(AppConstants.TAG,"Success"+response.body().getId());
                 } else {
                     liveData.postValue(null);
                     Log.d(AppConstants.TAG,"Not success"+response.code());

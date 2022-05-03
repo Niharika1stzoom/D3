@@ -1,11 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_browse_fragment"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TVActivity"
-    tools:deviceIds="tv"
-    tools:ignore="MergeRootFrame">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/secondaryTextColor">
+    <!-- Screen elements that can render outside the overscan safe area go here -->
+    <!-- Nested RelativeLayout with overscan-safe margin -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="27dp">
 
-</FrameLayout>
+        <include android:id="@+id/view_loader"
+            layout="@layout/view_loader"/>
+
+        <TextView
+            android:id="@+id/welcome_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/welcome_label"
+            android:visibility="gone"
+            android:textColor="@color/primaryColor"
+            android:fontFamily="@font/jura_bold"/>
+
+        <TextView
+            android:id="@+id/welcome_subtitle"
+           android:layout_below="@id/welcome_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:visibility="gone"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/welcome_subtitle"
+            android:textColor="@color/primaryColor"
+
+            android:fontFamily="@font/jura_medium"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/scan_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_subtitle"
+            android:layout_toRightOf="@id/imageView"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignTop="@id/imageView"
+            android:text="@string/login_text"
+            android:fontFamily="@font/jura_medium"/>
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_subtitle"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/margin_large"
+            android:visibility="gone"
+            android:layout_alignStart="@id/welcome_subtitle"
+            android:src="@drawable/ic_placeholder" />
+
+
+
+
+        <!-- Screen elements that need to be within the overscan safe area go here -->
+    </RelativeLayout>
+</RelativeLayout>

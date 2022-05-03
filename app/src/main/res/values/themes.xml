@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="fontFamily">@font/jura_medium</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.D3.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

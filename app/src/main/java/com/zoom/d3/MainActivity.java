@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.zoom.d3.databinding.ActivityMainBinding;
 import com.zoom.d3.util.AppConstants;
+import com.zoom.d3.util.AppUtil;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

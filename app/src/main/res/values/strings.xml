@@ -20,4 +20,5 @@
     <string name="refresh">Do you wish to refresh the playlist or exit?</string>
     <string name="no">Exit</string>
     <string name="yes">Refresh</string>
+    <string name="login_text"><![CDATA[ Register your device \n 1. Go to url https://d3.1stzoom.com and login \n 2. Click on Devices  \n 3. Scan the QR code on the screen \n and    add your device]]></string>
 </resources>

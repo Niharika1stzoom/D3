@@ -2,6 +2,7 @@ package com.zoom.d3.Web;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.zoom.d3.model.DeviceInfo;
 import com.zoom.d3.model.Playlist;
 import com.zoom.d3.repo.D3Repository;
+import com.zoom.d3.util.AppConstants;
 import com.zoom.d3.util.SharedPrefUtil;
 
 import java.util.Date;
@@ -28,7 +30,6 @@ public class WebViewModel extends AndroidViewModel {
     Timer mTimer;
     @Inject
     D3Repository repository;
-
     public void cancelTimer() {
         mTimer.cancel();
     }

@@ -3,16 +3,24 @@ package com.zoom.d3;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.zoom.d3.Web.TVWebActivity;
 import com.zoom.d3.Web.WebActivity;
 import com.zoom.d3.main.MainFragment;
 import com.zoom.d3.main.MainViewModel;
 import com.zoom.d3.util.AppConstants;
 import com.zoom.d3.util.AppUtil;
+
+import java.util.Calendar;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -23,61 +31,93 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class TVActivity extends FragmentActivity {
 
     private MainViewModel mViewModel;
+    private ImageView imageview;
+    Boolean registerUI = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tvactivity);
+        imageview = findViewById(R.id.imageView);
         initViewModel();
     }
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        if(AppUtil.isNetworkAvailableAndConnected(getApplicationContext()))
-            getDeviceDetails();
-        else
+
         if (mViewModel.checkDeviceRegister()) {
-            goToWebActivity();
+            displayloader();
+            if (AppUtil.isNetworkAvailableAndConnected(getApplicationContext()))
+                getDeviceDetails();
+            else
+                goToWebActivity();
         } else {
             setRegisterUI();
         }
     }
-    void getDeviceDetails(){
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mViewModel.cancelTimer();
+    }
+
+    void getDeviceDetails() {
+
         mViewModel.getDeviceDetails(AppUtil.getDeviceInfo(getApplicationContext())).
                 observe(this, deviceInfo -> {
-                    if(deviceInfo==null)
-                    {
-                        registerUser();
-                    }
-                    else {
-                        mViewModel.setRegistered(deviceInfo);
-                        goToWebActivity();
-                    }
-                });
-
-    }
-    void registerUser() {
-        mViewModel.registerDevice(AppUtil.getDeviceInfo(getApplicationContext())).
-                observe(this, deviceInfo -> {
                     if (deviceInfo == null) {
-                        if (!AppUtil.isNetworkAvailableAndConnected(getApplicationContext()))
-                            Toast.makeText(this,getString(R.string.network_err),Toast.LENGTH_SHORT);
-
+                        if (!registerUI) {
+                            setRegisterUI();
+                            return;
+                        }
+                        if (!AppUtil.isNetworkAvailableAndConnected(getApplicationContext())) {
+                            Toast.makeText(this, getString(R.string.network_err),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        mViewModel.createTimerTask(AppUtil.getPollTime(Calendar.getInstance()
+                                .getTime(), AppConstants.REGISTER_POLL_INTERVAL));
                     } else {
+                        mViewModel.cancelTimer();
                         mViewModel.setRegistered(deviceInfo);
-                        Toast.makeText(this, getString(R.string.register_success), Toast.LENGTH_SHORT).show();
                         goToWebActivity();
                     }
                 });
+
     }
+
+    private void displayloader() {
+        findViewById(R.id.view_loader).setVisibility(View.VISIBLE);
+        findViewById(R.id.imageView).setVisibility(View.GONE);
+        findViewById(R.id.scan_text).setVisibility(View.GONE);
+        findViewById(R.id.welcome_msg).setVisibility(View.GONE);
+        findViewById(R.id.welcome_subtitle).setVisibility(View.GONE);
+    }
+
+    private void hideloader() {
+        findViewById(R.id.view_loader).setVisibility(View.GONE);
+        findViewById(R.id.imageView).setVisibility(View.VISIBLE);
+        findViewById(R.id.scan_text).setVisibility(View.VISIBLE);
+        findViewById(R.id.welcome_msg).setVisibility(View.VISIBLE);
+        findViewById(R.id.welcome_subtitle).setVisibility(View.VISIBLE);
+    }
+
     private void setRegisterUI() {
-        //set the UI for registering
-        //On click of the submit button register him and show the and if any error show the err msg
-        //If the device code is wrong show him err msg a snackbar
-        registerUser();
+        registerUI = true;
+        hideloader();
+        Glide.with(this)
+                .load(AppUtil.generateQR
+                        (AppUtil.getDeviceInfo(this).getDeviceId(), AppConstants.SIZE_MOBILE))
+                .apply(new RequestOptions().override(AppConstants.SIZE_MOBILE, AppConstants.SIZE_MOBILE)
+                        .transform(new RoundedCorners(20)))
+                .into(imageview);
+        getDeviceDetails();
     }
+
     private void goToWebActivity() {
-        Intent intent = new Intent(this, WebActivity.class);
+        Intent intent = new Intent(this, TVWebActivity.class);
         startActivity(intent);
+        finish();
     }
 }

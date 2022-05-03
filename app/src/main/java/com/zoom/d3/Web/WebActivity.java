@@ -80,26 +80,7 @@ public class WebActivity extends AppCompatActivity {
             showWebContent();
         });
     }
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Refresh")
-                .setMessage(R.string.refresh)
-                .setNegativeButton(R.string.no,(dialog, which) -> {
-                    finish();
-                    super.onBackPressed();
-                    mViewModel.cancelTimer();
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } )
-                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    mViewModel.getPlayList();
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
+
     @Override
     protected void onStop() {
         super.onStop();
