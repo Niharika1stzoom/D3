@@ -2,6 +2,7 @@ package com.zoom.d3.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -11,6 +12,8 @@ import android.view.View;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.zoom.d3.model.DeviceInfo;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,4 +58,26 @@ public class AppUtil {
         }
         return bitmap;
     }
+
+  /*  public static Bitmap generateQR(String str,int size)  {
+        Bitmap bitmap=null;
+        try {
+            QRCodeWriter writer = new QRCodeWriter();
+            BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, size, size);
+
+            int w = bitMatrix.getWidth();
+            int h = bitMatrix.getHeight();
+            int[] pixels = new int[w * h];
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    pixels[y * w + x] = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+                }
+            }
+
+            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
+        }catch (WriterException exception)
+        {}
+        return bitmap;
+    }*/
 }

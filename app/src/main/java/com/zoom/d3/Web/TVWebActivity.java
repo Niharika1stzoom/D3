@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
@@ -38,10 +39,20 @@ public class TVWebActivity extends FragmentActivity {
         mViewModel = new ViewModelProvider(this).get(WebViewModel.class);
         observeURL();
     }
+    void displayLoader()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+    void hideLoader()
+    {
+        progressBar.setVisibility(View.GONE);
+    }
     void observeURL()
     {
+        displayLoader();
         //if playlist found set time for another poll if not will keep playing the last playlist found
         mViewModel.getPlayList().observe(this, playlists -> {
+            hideLoader();
             if(playlists==null ||  playlists.size()==0){
                 mViewModel.createTimerTask(AppUtil.getPollTime(Calendar.getInstance()
                         .getTime(), AppConstants.DEFAULT_POLL_INTERVAL));
@@ -62,6 +73,7 @@ public class TVWebActivity extends FragmentActivity {
     private void showWebContent() {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         WebViewClientImpl webViewClient = new WebViewClientImpl(progressBar);
         webView.setWebViewClient(webViewClient);

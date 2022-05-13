@@ -1,10 +1,14 @@
 package com.zoom.d3.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.List;
 
 public class Playlist {
-    String name,description,type,previewUrl;
+    String name,description,type;
+    @SerializedName("previewURL")
+    String previewUrl;
     List<String> files;
     Date startDate,endDate,updatedAt;
     String id;

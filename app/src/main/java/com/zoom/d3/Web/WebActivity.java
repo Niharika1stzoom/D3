@@ -22,6 +22,8 @@ import com.zoom.d3.databinding.ActivityWebBinding;
 import com.zoom.d3.util.AppConstants;
 import com.zoom.d3.util.AppUtil;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -64,10 +66,20 @@ public class WebActivity extends AppCompatActivity {
         mViewModel = new ViewModelProvider(this).get(WebViewModel.class);
         observeURL();
     }
+    void displayLoader()
+    {
+        binding.progressBar.setVisibility(View.VISIBLE);
+    }
+    void hideLoader()
+    {
+        binding.progressBar.setVisibility(View.GONE);
+    }
     void observeURL()
     {
+        displayLoader();
         //if playlist found set time for another poll if not will keep playing the last playlist found
         mViewModel.getPlayList().observe(this, playlists -> {
+        hideLoader();
             if(playlists==null ||  playlists.size()==0){
                 mViewModel.createTimerTask(AppUtil.getPollTime(Calendar.getInstance()
                         .getTime(),AppConstants.DEFAULT_POLL_INTERVAL));
@@ -90,6 +102,7 @@ public class WebActivity extends AppCompatActivity {
         WebSettings webSettings = binding.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webSettings.setDomStorageEnabled(true);
         WebViewClientImpl webViewClient = new WebViewClientImpl(binding.progressBar);
         binding.webView.setWebViewClient(webViewClient);
         binding.webView.loadUrl(mViewModel.getLastUrl());

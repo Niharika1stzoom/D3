@@ -20,7 +20,11 @@ public interface D3ApiInterface {
 
     @GET("device/{deviceId}/")
     Call<List<Playlist>> getPlaylists(@Path("deviceId") String deviceId,
-                                      @Query("endDate") Date endDate);
+                                      @Query("endDate") String endDate);
     @GET("device/")
-    Call<List<DeviceInfo>> getDevice(@Query("token") String token);
+    Call<DeviceInfo> getDevice(@Query("token") String token);
+
+
+
+
 }

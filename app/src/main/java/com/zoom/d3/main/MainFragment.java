@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +67,6 @@ public class MainFragment extends Fragment {
 
     }
 
-
     void getDeviceDetails() {
         mViewModel.getDeviceDetails(AppUtil.getDeviceInfo(getContext())).
                 observe(getViewLifecycleOwner(), deviceInfo -> {
@@ -92,15 +93,16 @@ public class MainFragment extends Fragment {
 
 
     private void setRegisterUI() {
-
         registerUI = true;
         hideloader();
-        Glide.with(getContext())
+       /* Glide.with(getContext())
                 .load(AppUtil.generateQR
                         (AppUtil.getDeviceInfo(getContext()).getDeviceId(), AppConstants.SIZE_MOBILE))
                 .apply(new RequestOptions().override(AppConstants.SIZE_MOBILE, AppConstants.SIZE_MOBILE)
                         .transform(new RoundedCorners(20)))
-                .into(mBinding.imageView);
+                .into(mBinding.imageView);*/
+        mBinding.imageView.setImageBitmap(AppUtil.generateQR
+                (AppUtil.getDeviceInfo(getContext()).getDeviceId(), AppConstants.SIZE_MOBILE));
         getDeviceDetails();
     }
 

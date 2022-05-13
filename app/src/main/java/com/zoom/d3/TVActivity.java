@@ -44,7 +44,6 @@ public class TVActivity extends FragmentActivity {
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
         if (mViewModel.checkDeviceRegister()) {
             displayloader();
             if (AppUtil.isNetworkAvailableAndConnected(getApplicationContext()))
@@ -84,7 +83,6 @@ public class TVActivity extends FragmentActivity {
                         goToWebActivity();
                     }
                 });
-
     }
 
     private void displayloader() {
@@ -106,12 +104,14 @@ public class TVActivity extends FragmentActivity {
     private void setRegisterUI() {
         registerUI = true;
         hideloader();
-        Glide.with(this)
+        /*Glide.with(this)
                 .load(AppUtil.generateQR
                         (AppUtil.getDeviceInfo(this).getDeviceId(), AppConstants.SIZE_MOBILE))
                 .apply(new RequestOptions().override(AppConstants.SIZE_MOBILE, AppConstants.SIZE_MOBILE)
                         .transform(new RoundedCorners(20)))
-                .into(imageview);
+                .into(imageview);*/
+        imageview.setImageBitmap(AppUtil.generateQR
+                (AppUtil.getDeviceInfo(this).getDeviceId(), AppConstants.SIZE_TV));
         getDeviceDetails();
     }
 

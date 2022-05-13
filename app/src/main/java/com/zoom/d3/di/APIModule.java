@@ -15,7 +15,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @InstallIn(SingletonComponent.class)
 public class APIModule {
-    String baseURL="http://20.204.52.253:3000/api/v0/";
+  //  String baseURL="http://20.204.52.253:3000/api/v0/";
+    String baseURL="https://restaurants.happiestplaces.com/api/v0/d3/app/";
+
+
     @Singleton
     @Provides
     public D3ApiInterface getRestApiInterface(Retrofit retrofit) {
